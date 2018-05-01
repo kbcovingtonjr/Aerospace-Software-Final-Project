@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include "headers.h"
 
 //void rand_matrix();
 
 int main(int argc, char *argv[])
 {
+
+	// Get cache size of computer
+	int cacheSize = getCacheSize();
+        printf("Cache size of this computer's processor: %d Bytes\n", cacheSize);
+
 	// Update progress
 	printf("Initializing matrices...\n");
 	
