@@ -147,6 +147,89 @@ int main(int argc, char *argv[])
 		printf("\n");
 	}		
 
+
+
+	// -----------------------------------------------------------------
+	
+	float blockDim = sqrt( cacheSize / sizeof(int) );
+	printf("%f\n", blockDim);
+	
+/*
+	// Create random matrices
+	//rand_matrix();
+
+	// Update progress
+	printf("Computing matrix product...\n");
+	
+	// Begin clock
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+
+	// Compute matrix product
+	
+	//size of matrices asssuming same size and 
+	int n;
+	n = rA;
+
+	int acc00, acc01, acc10, acc11;
+	ib = 2;
+	kb = 2;
+
+	for (ii = 0; ii < n; ii += ib)
+	{
+		for (kk = 0; kk < n; kk += kb)
+		{
+			for (j = 0; j < n; j += 2)
+			{
+				for (i = ii; i < ii + ib; i += 2)
+				{
+					if (kk == 0)
+						acc00 = acc01 = acc10 = acc11 = 0;
+					else
+					{
+						acc00 = arrC[i][j];
+						acc01 = arrC[i][j+1];
+						acc10 = arrC[i+1][j];
+						acc11 = arrC[i+1][j+1];
+					}	
+					for (k = kk; k < kk + kb; k++)
+					{
+						acc00 += arrA[i][k]*arrB[k][j];
+						acc01 += arrA[i][k]*arrB[k][j+1];
+						acc10 += arrA[i+1][k]*arrB[k][j];
+						acc11 += arrA[i+1][k]*arrB[k][j+1];
+					}
+					arrC[i][j] = acc00;
+					arrC[i][j+1] = acc01;
+					arrC[i+1][j] = acc10;
+					arrC[i+1][j+1] = acc11;
+				}
+			}
+		}
+	}
+
+	// Stop clock
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	printf("Time spent computing matrix product: %lf\n",time_spent);
+	
+	printf("Matrix Product: \n");
+	for(i = 0;i < n;i++)
+	{
+		for(j = 0;j < n;j++)
+		{
+			printf("%d ",arrC[i][j]);
+		}
+		printf("\n");
+	}		
+*/
+	// -----------------------------------------------------------------
+
+
+
+
+
 	free(arrA);
 	free(arrB);
 	free(arrC);
@@ -154,17 +237,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-//void rand_matrix()
-//{
-//	int i, j;
-//	srand ( time(NULL) );
-//	
-//	for (i = 0; i < n; i++)
-//	{		
-//		for (j = 0; j < n; j++)
-//		{
-//			A[i][j] = (double) rand() / RAND_MAX;
-//			B[i][j] = (double) rand() / RAND_MAX;
-//		}
-//	}
-//}
+/*
+void rand_matrix()
+{
+	int i, j;
+	srand ( time(NULL) );
+	
+	for (i = 0; i < n; i++)
+	{		
+		for (j = 0; j < n; j++)
+		{
+			A[i][j] = (double) rand() / RAND_MAX;
+			B[i][j] = (double) rand() / RAND_MAX;
+		}
+	}
+}
+*/
