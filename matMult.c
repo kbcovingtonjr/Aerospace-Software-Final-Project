@@ -4,10 +4,11 @@
 #include <time.h>
 #include "headers.h"
 
-//void rand_matrix();
+void rand_matrix(int n, float A[n][n], float B[n][n]);
 
 int main(int argc, char *argv[])
 {
+
 
 	// Get cache size of computer
 	int cacheSize = getCacheSize();
@@ -16,15 +17,18 @@ int main(int argc, char *argv[])
 	// Update progress
 	printf("Initializing matrices...\n");
 	
-	int rA,cA,rB,cB;
-	int i,j,k;
+	//int rA,cA,rB,cB;
+	//int i,j,k;
 	
+	/*
 	FILE *A,*B,*C;
 	A = fopen(argv[1],"r");
 	B = fopen(argv[2],"r");
+	*/
 	
-	int **arrA,**arrB,**arrC,num;
+	//int **arrA,**arrB,**arrC,num;
 	
+	/*
 	//read in first matrix
 	fscanf(A,"%d %d \n",&rA,&cA);
 	arrA = (int**)calloc(rA,sizeof(int*));
@@ -74,6 +78,33 @@ int main(int argc, char *argv[])
 			//printf("arrC[%d][%d] = %lf\n",j,k,arrC[j][k]);
 		}
 	}
+	*/
+
+	
+	// Create random matrices
+	int n = 100000;
+	float A[n][n];
+	float B[n][n];
+	rand_matrix(n, A, B);
+
+	for (int i=0; i<n; i++)
+	{
+		for (int j=0; j<n; j++)
+		{
+			printf("%f\n", B[i][j]);
+		}
+	}
+	/*
+
+	// Initialize final matrix of zeros
+	float C[n][n];
+	for (int i=0; i<n; i++)
+	{
+		for (int j=0; j<n; j++)
+		{
+			C[i][j] = 0;
+		}
+	}
 
 	// Iterators
 	int  ii, kk;
@@ -92,12 +123,14 @@ int main(int argc, char *argv[])
 	// Compute matrix product
 	
 	//size of matrices asssuming same size and 
-	int n;
-	n = rA;
+	//int n;
+	//n = rA;
+
 
 	int acc00, acc01, acc10, acc11;
 	int ib = 2;
 	int kb = 2;
+	int i,j,k;
 	
 	for (ii = 0; ii < n; ii += ib)
 	{
@@ -111,26 +144,27 @@ int main(int argc, char *argv[])
 						acc00 = acc01 = acc10 = acc11 = 0;
 					else
 					{
-						acc00 = arrC[i][j];
-						acc01 = arrC[i][j+1];
-						acc10 = arrC[i+1][j];
-						acc11 = arrC[i+1][j+1];
+						acc00 = C[i][j];
+						acc01 = C[i][j+1];
+						acc10 = C[i+1][j];
+						acc11 = C[i+1][j+1];
 					}	
 					for (k = kk; k < kk + kb; k++)
 					{
-						acc00 += arrA[i][k]*arrB[k][j];
-						acc01 += arrA[i][k]*arrB[k][j+1];
-						acc10 += arrA[i+1][k]*arrB[k][j];
-						acc11 += arrA[i+1][k]*arrB[k][j+1];
+						acc00 += A[i][k]*B[k][j];
+						acc01 += A[i][k]*B[k][j+1];
+						acc10 += A[i+1][k]*B[k][j];
+						acc11 += A[i+1][k]*B[k][j+1];
 					}
-					arrC[i][j] = acc00;
-					arrC[i][j+1] = acc01;
-					arrC[i+1][j] = acc10;
-					arrC[i+1][j+1] = acc11;
+					C[i][j] = acc00;
+					C[i][j+1] = acc01;
+					C[i+1][j] = acc10;
+					C[i+1][j+1] = acc11;
 				}
 			}
 		}
 	}
+
 
 	// Stop clock
 	end = clock();
@@ -142,7 +176,7 @@ int main(int argc, char *argv[])
 	{
 		for(j = 0;j < n;j++)
 		{
-			printf("%d ",arrC[i][j]);
+			printf("%d ",C[i][j]);
 		}
 		printf("\n");
 	}		
@@ -151,9 +185,10 @@ int main(int argc, char *argv[])
 
 	// -----------------------------------------------------------------
 	
-	float blockDim = sqrt( cacheSize / sizeof(int) );
+	float blockDim = sqrt( cacheSize / sizeof(float) );
 	printf("%f\n", blockDim);
 	
+*/
 /*
 	// Create random matrices
 	//rand_matrix();
@@ -230,15 +265,16 @@ int main(int argc, char *argv[])
 
 
 
+	/*
 	free(arrA);
 	free(arrB);
 	free(arrC);
+	*/
 
 	return 0;
 }
 
-/*
-void rand_matrix()
+void rand_matrix(int n, float A[n][n], float B[n][n])
 {
 	int i, j;
 	srand ( time(NULL) );
@@ -247,9 +283,8 @@ void rand_matrix()
 	{		
 		for (j = 0; j < n; j++)
 		{
-			A[i][j] = (double) rand() / RAND_MAX;
-			B[i][j] = (double) rand() / RAND_MAX;
+			A[i][j] = (float) rand() / RAND_MAX;
+			B[i][j] = (float) rand() / RAND_MAX;
 		}
 	}
 }
-*/
