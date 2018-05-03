@@ -13,15 +13,27 @@ int main(int argc, char *argv[])
 	// Get cache size of computer
 	int cacheSize = getCacheSize();
         printf("Cache size of this computer's processor: %d Bytes\n", cacheSize);
+	int memAvail = sqrt(cacheSize/sizeof(double));
+	printf("total available memory for matrices: %d\n",memAvail);
 
 	// Update progress
 	printf("Initializing matrices...\n");
 	
-	int n = 10000;
+	//*************N CANNNOT BE GREATER THAN 600 OR SEGMENTATION FAULT**************
+	int n = 10;
 	int i,j,k,z;
+	if (3*(n2) > cunkSize)
+	{
+		printf("ERROR: Not enough memory!");
+		return 0;
+	}
+	else{}
 		
-	double **arrA,**arrB,**arrC;
-	
+	//double **arrA,**arrB,**arrC;
+	double arrA[n][n],arrB[n][n],arrC[n][n];
+
+	//////////////////////////////////////////////////////////////////////
+	/*
 	//declare first matrix, A
 	arrA = (double**)calloc(n,sizeof(double*));
 	arrA[0] = (double*)calloc(n^2,sizeof(double));
@@ -55,6 +67,9 @@ int main(int argc, char *argv[])
 	printf("Size of A: %ld\n",sizeof(arrA)/sizeof(double));
 	printf("Size of B: %ld\n",sizeof(arrB)/sizeof(double));
 	printf("Size of C: %ld\n",sizeof(arrC)/sizeof(double));
+	*/
+	///////////////////////////////////////////////////////////////////
+	
 
 	//Create random matrices
         //rand_matrix(n, arrA, arrB);
@@ -64,18 +79,18 @@ int main(int argc, char *argv[])
 		for (j = 0; j < n; j++)                         
 		{         
 			//printf("Column = %d\n",j);			
-			//arrA[i][j] = (double) rand() / RAND_MAX;
+			arrA[i][j] = (double) rand() / RAND_MAX;
 		       //printf("A row done\n");	
-        		//arrB[i][j] = (double) rand() / RAND_MAX;
+        		arrB[i][j] = (double) rand() / RAND_MAX;
 			//printf("A[%d][%d] = %lf\n",i,j,arrA[i][j]);
 			arrC[i][j] = 0.0;
 		}
 	}
-	/*
+	
 	// Update progress
 	printf("Computing matrix product(unoptimized)...\n");
 	
-	int  ii, kk;
+	int ii, kk;
 	
 	// Begin clock
 	clock_t begin, end;
@@ -84,7 +99,7 @@ int main(int argc, char *argv[])
 
 	// Compute matrix product
 
-	int acc00, acc01, acc10, acc11;
+	double  acc00, acc01, acc10, acc11;
 	int ib = 2;
 	int kb = 2;
 	
@@ -126,23 +141,26 @@ int main(int argc, char *argv[])
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	printf("Time spent computing matrix product(unoptimized): %lf\n",time_spent);
-	
+	/*
 	printf("Matrix Product: \n");
 	for(i = 0;i < n;i++)
 	{
 		for(j = 0;j < n;j++)
 		{
-			printf("%f ",arrC[i][j]);
+			printf("%f",arrC[i][j]);
 		}
 		printf("\n");
 	}		
-
-	printf("--------------------------------------------------");
+	*/
+	printf("--------------------------------------------------\n");
 
 	// -----------------------------------------------------------------
 	
-	float blockDim = sqrt( cacheSize / sizeof(float) );
-	printf("%f\n", blockDim);
+	//****************IN PROGRESS*********************
+	/*
+	//Determine available memory for chunks
+	int blockDim = sqrt( cacheSize / sizeof(double) ) - 3*(n^2);
+	printf("Memory available for chunks: %d\n", blockDim);
 	
 	// Update progress
 	printf("Computing matrix product(optimized)...\n");
@@ -151,8 +169,12 @@ int main(int argc, char *argv[])
 	begin = clock();
 
 	// Compute matrix product
-	ib = z;
-	kb = z;
+	// *****????????*******
+	
+	ib = blockDim;
+	kb = blockDim;
+	
+	// *************************
 
 	for (ii = 0; ii < n; ii += ib)
 	{
@@ -209,9 +231,9 @@ int main(int argc, char *argv[])
 
 
 	*/
-	free(arrA);
-	free(arrB);
-	free(arrC);
+	//free(arrA);
+	//free(arrB);
+	//free(arrC);
 	
 	
 	return 0;
