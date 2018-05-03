@@ -4,7 +4,7 @@
 #include <time.h>
 #include "headers.h"
 
-void rand_matrix(int n, float **A, float **B);
+void rand_matrix(int n, float **arrA, float **arrB);
 
 int main(int argc, char *argv[])
 {
@@ -24,24 +24,32 @@ int main(int argc, char *argv[])
 	
 	//declare first matrix, A
 	arrA = (float**)calloc(n,sizeof(float*));
+	
+	printf("rows of A defined\n");
 	arrA[0] = (float*)calloc(n^2,sizeof(float));
+	
 	for(i = 1;i < n;i++)
 	{
 		arrA[i] = arrA[i-1] + n;
 	}
-	
+	printf("A done\n");
+
 	//read in second matrix
 	arrB = (float**)calloc(n,sizeof(float*));
 	arrB[0] = (float*)calloc(n^2,sizeof(float));
+	printf("B initial declaration\n");
 	for(i = 1;i < n;i++)
 	{
-		arrB[i] = arrA[i-1] + n;
+		arrB[i] = arrB[i-1] + n;
 	}
-
+	printf("B done\n");
 	arrC = (float**)calloc(n,sizeof(float*));
 	arrC[0] = (float*)calloc(n^2,sizeof(float));
+	printf("C initial declaration");
+
 	for(i = 1;i < n;i++)
 	{
+		printf("%d\n",i);
 		arrC[i] = arrC[i-1] + n;
 	}
 	for(j = 0;j < n;j++)
@@ -52,7 +60,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	
+	printf("matrices allocated\n");
+	/*
 	// Create random matrices
 	rand_matrix(n, arrA, arrB);
 	
@@ -193,16 +202,17 @@ int main(int argc, char *argv[])
 
 
 
-	
+	*/
 	free(arrA);
 	free(arrB);
 	free(arrC);
 	
-
+	
 	return 0;
+	
 }
 
-void rand_matrix(int n, float **A, float **B)
+void rand_matrix(int n, float **arrA, float **arrB)
 {
 	int i, j;
 	srand ( time(NULL) );
@@ -211,8 +221,9 @@ void rand_matrix(int n, float **A, float **B)
 	{		
 		for (j = 0; j < n; j++)
 		{
-			A[i][j] = (float) rand() / RAND_MAX;
-			B[i][j] = (float) rand() / RAND_MAX;
+			printf("HERE");
+			arrA[i][j] = (float) rand() / RAND_MAX;
+			arrB[i][j] = (float) rand() / RAND_MAX;
 		}
 	}
 }
