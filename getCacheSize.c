@@ -22,7 +22,7 @@ int getCacheSize()
 	while (!feof(file))
        	{
 		// Read line of file
-		fscanf(file, "%s", &valueOnLine);
+		fscanf(file, "%c", &valueOnLine);
 		
 		// If we found the line where the cache data field is, break
 		if ( strcmp("cache", valueOnLine) == 0 )
