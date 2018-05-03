@@ -22,7 +22,7 @@ int getCacheSize()
 	while (!feof(file))
        	{
 		// Read line of file
-		fscanf(file, "%c", &valueOnLine);
+		fscanf(file, "%s", valueOnLine);
 		
 		// If we found the line where the cache data field is, break
 		if ( strcmp("cache", valueOnLine) == 0 )
@@ -32,14 +32,14 @@ int getCacheSize()
        	}
 
 	// Skip a few lines that contain some formatting
-	fscanf(file, "%s", &valueOnLine);
-	fscanf(file, "%s", &valueOnLine);
-	fscanf(file, "%s", &valueOnLine);	// number read from file
+	fscanf(file, "%s", valueOnLine);
+	fscanf(file, "%s", valueOnLine);
+	fscanf(file, "%s", valueOnLine);	// number read from file
 	int cacheNum = atoi(valueOnLine);	// convert string to int
        	
 	// Get units of cache size
 	char units[100];
-	fscanf(file, "%s", &units);		// units of cache size
+	fscanf(file, "%s", units);		// units of cache size
 	int cacheSize;				// number of bytes of cache
 
 	if ( strcmp("B", units) == 0 )
