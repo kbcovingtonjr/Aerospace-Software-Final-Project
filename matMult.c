@@ -20,14 +20,12 @@ int main(int argc, char *argv[])
 	int n = 10000;
 	int i,j,k,z;
 		
-	float **arrA,**arrB,**arrC;
+	double **arrA,**arrB,**arrC;
 	
 	//declare first matrix, A
-	arrA = (float**)calloc(n,sizeof(float*));
-	
+	arrA = (double**)calloc(n,sizeof(double*));
+	arrA[0] = (double*)calloc(n^2,sizeof(double));
 	printf("rows of A defined\n");
-	arrA[0] = (float*)calloc(n^2,sizeof(float));
-	
 	for(i = 1;i < n;i++)
 	{
 		arrA[i] = arrA[i-1] + n;
@@ -35,31 +33,49 @@ int main(int argc, char *argv[])
 	printf("A done\n");
 
 	//read in second matrix
-	arrB = (float**)calloc(n,sizeof(float*));
-	arrB[0] = (float*)calloc(n^2,sizeof(float));
+	arrB = (double**)calloc(n,sizeof(double*));
+	arrB[0] = (double*)calloc(n^2,sizeof(double));
 	printf("B initial declaration\n");
 	for(i = 1;i < n;i++)
 	{
 		arrB[i] = arrB[i-1] + n;
 	}
 	printf("B done\n");
-	arrC = (float**)calloc(n,sizeof(float*));
-	arrC[0] = (float*)calloc(n^2,sizeof(float));
+	
+	//allocate product matrix
+	arrC = (double**)calloc(n,sizeof(double*));
+	arrC[0] = (double*)calloc(n^2,sizeof(double));
 	printf("C initial declaration\n");
 	for(i = 1;i < n;i++)
 	{
 		arrC[i] = arrC[i-1] + n;
 	}
 	printf("matrices allocated\n");
+	
+	printf("Size of A: %ld\n",sizeof(arrA)/sizeof(double));
+	printf("Size of B: %ld\n",sizeof(arrB)/sizeof(double));
+	printf("Size of C: %ld\n",sizeof(arrC)/sizeof(double));
 
-	// Create random matrices
-	rand_matrix(n, arrA, arrB);
+	//Create random matrices
+        //rand_matrix(n, arrA, arrB);
+	for (i = 0; i < n; i++)           
+	{	
+		printf("Row = %d\n",i); 	
+		for (j = 0; j < n; j++)                         
+		{         
+			//printf("Column = %d\n",j);			
+			//arrA[i][j] = (double) rand() / RAND_MAX;
+		       //printf("A row done\n");	
+        		//arrB[i][j] = (double) rand() / RAND_MAX;
+			//printf("A[%d][%d] = %lf\n",i,j,arrA[i][j]);
+			arrC[i][j] = 0.0;
+		}
+	}
 	/*
-	// Iterators
-	int  ii, kk;
-
 	// Update progress
 	printf("Computing matrix product(unoptimized)...\n");
+	
+	int  ii, kk;
 	
 	// Begin clock
 	clock_t begin, end;
@@ -202,7 +218,7 @@ int main(int argc, char *argv[])
 	
 }
 
-void rand_matrix(int n, float **arrA, float **arrB)
+/*void rand_matrix(int n, float **arrA, float **arrB)
 {
 	int i, j;
 	srand ( time(NULL) );
@@ -216,4 +232,4 @@ void rand_matrix(int n, float **arrA, float **arrB)
 		}
 		printf("HERE\n");
 	}
-}
+}*/
