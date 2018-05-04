@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
 	// Set margin
 	//int margin = n / 4;	// number of rows/columns to reserve to pad the cache
-	int margin = 0;	// number of rows/columns to reserve to pad the cache
+	int margin = 2;	// number of rows/columns to reserve to pad the cache
 
 	// Figure out a good size for the matrix blocks
 	int numBlocks = 1;
@@ -59,77 +59,6 @@ int main(int argc, char *argv[])
 	printf(" initialized\n\n");
 	// ---------------------------------------------------------------
 
-	/*
-	// ----------------- COMPUTE PRODUCT (UNOPTIMIZED) ---------------
-	// Update progress
-	printf("--------------------------------------------------\n");
-	printf("Computing matrix product (unoptimized)...\n");
-	
-	//int ii, kk;
-	
-	// Begin clock
-	clock_t begin, end;
-	double time_spent;
-	begin = clock();
-
-	// Compute matrix product
-
-	float  acc00, acc01, acc10, acc11;
-	int ib = 2;
-	int kb = 2;
-	
-	for (int ii = 0; ii < n; ii += ib)
-	{
-		for (int kk = 0; kk < n; kk += kb)
-		{
-			for (int j = 0; j < n; j += 2)
-			{
-				for (int i = ii; i < ii + ib; i += 2)
-				{
-					if (kk == 0)
-						acc00 = acc01 = acc10 = acc11 = 0.0;
-					else
-					{
-						acc00 = arrC[i][j];
-						acc01 = arrC[i][j+1];
-						acc10 = arrC[i+1][j];
-						acc11 = arrC[i+1][j+1];
-					}	
-					for (int k = kk; k < kk + kb; k++)
-					{
-						acc00 += arrA[i][k]*arrB[k][j];
-						acc01 += arrA[i][k]*arrB[k][j+1];
-						acc10 += arrA[i+1][k]*arrB[k][j];
-						acc11 += arrA[i+1][k]*arrB[k][j+1];
-					}
-					arrC[i][j] = acc00;
-					arrC[i][j+1] = acc01;
-					arrC[i+1][j] = acc10;
-					arrC[i+1][j+1] = acc11;
-				}
-			}
-		}
-	}
-
-	// Stop clock
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("Time spent computing matrix product(unoptimized): %lf seconds\n",time_spent);
-
-	
-	printf("Matrix Product: \n");
-	for(i = 0;i < n;i++)
-	{
-		for(j = 0;j < n;j++)
-		{
-			printf("%f",arrC[i][j]);
-		}
-		printf("\n");
-	}		
-	
-	printf("--------------------------------------------------\n\n");
-	// ---------------------------------------------------------------
-	*/
 
 
 	// ----------------- COMPUTE PRODUCT (OPTIMIZED) -----------------
@@ -138,9 +67,9 @@ int main(int argc, char *argv[])
 	printf("Computing matrix product (optimized)...\n");
 	
 	// Begin clock
-	clock_t begin, end;
+	double begin, end;
 	double time_spent;
-	begin = clock();
+	begin = omp_get_wtime();
 
 
 	// Set new block size
@@ -195,8 +124,8 @@ int main(int argc, char *argv[])
 
 
 	// Stop clock
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	end = omp_get_wtime();
+	time_spent = end - begin;
 	printf("Time spent computing matrix product (optimized): %lf seconds\n",time_spent);
 
 	/*
@@ -214,26 +143,6 @@ int main(int argc, char *argv[])
 	// ---------------------------------------------------------------
 
 
-	//free(arrA);
-	//free(arrB);
-	//free(arrC);
-	
 	return 0;
 }
 
-
-/*void rand_matrix(int n, float **arrA, float **arrB)
-{
-	int i, j;
-	srand ( time(NULL) );
-	
-	for (i = 0; i < n; i++)
-	{		
-		for (j = 0; j < n; j++)
-		{
-			arrA[i][j] = (float) rand() / RAND_MAX;
-			arrB[i][j] = (float) rand() / RAND_MAX;
-		}
-		printf("HERE\n");
-	}
-}*/
