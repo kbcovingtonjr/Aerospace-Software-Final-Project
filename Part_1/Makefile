@@ -7,13 +7,13 @@
 #
 # ************************************************************************
 
-OPTIMIZATION = -O3
+OPTIMIZATION = -o
 
 matMult: matMult.c getCacheSize.c
 	gcc -o matMult matMult.c getCacheSize.c -lm
 
 matMultv2: matMultv2.c getCacheSize.c
-	gcc $(OPTIMIZATION) -o matMult2 matMultv2.c getCacheSize.c -lm
+	gcc -o matMult2 matMultv2.c getCacheSize.c -lm -lblas
 clean: 
 	rm -f *.o matMult
 	rm -f *.o matMultv2

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <cblas.h>
 #include "headers.h"
 
 
@@ -9,6 +10,7 @@
 #define n 1000
 
 // Allocate matrices on heap
+// set to float for other algorithm
 float arrA[n][n],arrB[n][n],arrC[n][n];
 
 int main(int argc, char *argv[])
@@ -20,7 +22,13 @@ int main(int argc, char *argv[])
 	// Get cache size of computer
 	int cacheSize = getCacheSize();
         printf("Cache size of this computer's processor: %d Bytes\n", cacheSize);
+	
+	
 	int nAvail = sqrt(cacheSize/sizeof(float));
+	//when n = 3000, nAvail/16 closest
+	//when n = 1000, nAvail/4 faster
+	//when n = 2000, 
+	
 	printf("Dimension size of matrix that can fit in cache: [%d x %d] \n", nAvail,nAvail);
 	printf("Input Matrix Sizes: %d\n",n);
 	// Set margin
@@ -41,45 +49,57 @@ int main(int argc, char *argv[])
 
 	// ---------------------- INITIALIZE MATRICES --------------------
 	printf("Initializing matrices...");
-
+	if(atoi(argv[1]) == 1 || atoi(argv[1])==2)
+	{
 	// Create random matrices
         // rand_matrix(n, arrA, arrB);
-	for (int i = 0; i < n; i++)           
-	{	
-		//printf("Row = %d\n",i); 	
-		for (int j = 0; j < n; j++)                         
-		{         
-        		arrA[i][j] = (float) rand() / RAND_MAX;
-        		arrB[i][j] = (float) rand() / RAND_MAX;
-			arrC[i][j] = 0.0;
-			//printf("A[%d][%d] = %lf\n",i,j,arrA[i][j]);
+		for (int i = 0; i < n; i++)           
+		{	
+			//printf("Row = %d\n",i); 	
+			for (int j = 0; j < n; j++)                         
+			{         
+        			arrA[i][j] = (float) rand() / RAND_MAX;
+        			arrB[i][j] = (float) rand() / RAND_MAX;
+				arrC[i][j] = 0.0;
+				//printf("A[%d][%d] = %lf\n",i,j,arrA[i][j]);
+			}
 		}
+		printf(" initialized\n\n");
 	}
-	printf(" initialized\n\n");
 	// ---------------------------------------------------------------
-
-
 	
-	// ----------------- COMPUTE PRODUCT (UNOPTIMIZED) ---------------
-	// Update progress
-	printf("--------------------------------------------------\n");
-	printf("Computing matrix product (unoptimized)...\n");
-	
-	//int ii, kk;
-	
+	if (atoi(argv[1]) == 3)
+	{
+	//---------------------INITIALIZE MATRICES (BLAS)----------------
+		printf("Initializing matrices...");
+		for (int i = 0; i < n; i++)           
+        	{	
+			//printf("Row = %d\n",i);      
+			for (int j = 0; j < n; j++)    
+			{	                              
+				arrA[i][j] = (double) rand() / RAND_MAX;
+				arrB[i][j] = (double) rand() / RAND_MAX;
+				arrC[i][j] = 0.0;
+				//printf("A[%d][%d] = %//int ii, kk;
+			}
+		}                               
+		printf(" initialized\n\n");            
+	}
 	// Begin clock
 	clock_t begin, end;
 	double time_spent;
 	
-	// Compute matrix product
-
+	//change to float for case 1 and 2
+	//change to double for case 3
 	float  acc00, acc01, acc10, acc11;
+	
+	// Compute matrix product
 	int ib;
 	int kb;
 	if(atoi(argv[1]) == 1)
 	{
-		ib = 20;
-		kb = 50;
+		ib = 0.02*n;
+		kb = 0.05*n;
 		begin = clock();
 	
 		for (int ii = 0; ii < n; ii += ib)
@@ -158,8 +178,8 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		ib = nAvail - margin;
-		kb = nAvail - margin;
+		ib = 0.25*nAvail;
+		kb = 0.25*nAvail;
 	}
 	
 	//ib = blockSize;
@@ -228,6 +248,18 @@ int main(int argc, char *argv[])
 	printf("--------------------------------------------------\n\n");
 	// ---------------------------------------------------------------
 	}
+	
+	//---------------------OPTIMIZED (BLAS)--------------------
+	/*
+	if (atoi(argv[1]) == 3)
+	{
+		begin = clock();
+		cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,n,n,n,1.0,*arrA,n,*arrB,n,0.0,*arrC,n);
+		end = clock();
+		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		printf("Time spent computing matrix product (optimized): %lf seconds\n",time_spent);
+	}
+	*/
 
 	return 0;
 }
