@@ -6,7 +6,7 @@
 
 
 // Define the size of the nxn matrices we're working with
-#define n 100
+#define n 2000
 
 // Allocate matrices on heap
 float arrA[n][n],arrB[n][n],arrC[n][n];
@@ -24,7 +24,8 @@ int main(int argc, char *argv[])
 	printf("Dimension size of matrix that can fit in cache: [%d x %d] \n", nAvail,nAvail);
 
 	// Set margin
-	int margin = 2;	// number of rows/columns to reserve to pad the cache
+	//int margin = n / 4;	// number of rows/columns to reserve to pad the cache
+	int margin = 0;	// number of rows/columns to reserve to pad the cache
 
 	// Figure out a good size for the matrix blocks
 	int numBlocks = 1;
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
 		blockSize = n / numBlocks;
 		numBlocks++;
 	}
-	while ( blockSize > nAvail );
+	while ( blockSize > nAvail-margin );
 
         printf("Block size chosen: [%d x %d] \n", blockSize, blockSize);
 
@@ -87,7 +88,7 @@ int main(int argc, char *argv[])
 				for (int i = ii; i < ii + ib; i += 2)
 				{
 					if (kk == 0)
-						acc00 = acc01 = acc10 = acc11 = 0;
+						acc00 = acc01 = acc10 = acc11 = 0.0;
 					else
 					{
 						acc00 = arrC[i][j];
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
 
 
 
-	// ---------------------- RE-INITIALIZE MATRIX -------------------
+	// ---------------------- RE-INITIALIZE MATRICES -----------------
 	printf("Initializing matrices...");
 
 	// Create random matrices
@@ -141,6 +142,8 @@ int main(int argc, char *argv[])
 		//printf("Row = %d\n",i); 	
 		for (int j = 0; j < n; j++)                         
 		{         
+        		arrA[i][j] = (float) rand() / RAND_MAX;
+        		arrB[i][j] = (float) rand() / RAND_MAX;
 			arrC[i][j] = 0.0;
 		}
 	}
@@ -176,6 +179,8 @@ int main(int argc, char *argv[])
 	*/
 	ib = blockSize;
 	kb = blockSize;
+	//ib = 50;
+	//kb = 50;
 
 
 	// Compute matrix product
@@ -188,7 +193,7 @@ int main(int argc, char *argv[])
 				for (int i = ii; i < ii + ib; i += 2)
 				{
 					if (kk == 0)
-						acc00 = acc01 = acc10 = acc11 = 0;
+						acc00 = acc01 = acc10 = acc11 = 0.0;
 					else
 					{
 						acc00 = arrC[i][j];
