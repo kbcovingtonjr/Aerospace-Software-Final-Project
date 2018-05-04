@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
 	while ( blockSize > nAvail-margin );
 
         printf("Block size chosen: [%d x %d] \n", blockSize, blockSize);
-
 	
 
 	// ---------------------- INITIALIZE MATRICES --------------------
@@ -60,8 +59,7 @@ int main(int argc, char *argv[])
 	printf(" initialized\n\n");
 	// ---------------------------------------------------------------
 
-
-	
+	/*
 	// ----------------- COMPUTE PRODUCT (UNOPTIMIZED) ---------------
 	// Update progress
 	printf("--------------------------------------------------\n");
@@ -118,7 +116,7 @@ int main(int argc, char *argv[])
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	printf("Time spent computing matrix product(unoptimized): %lf seconds\n",time_spent);
 
-	/*
+	
 	printf("Matrix Product: \n");
 	for(i = 0;i < n;i++)
 	{
@@ -128,10 +126,10 @@ int main(int argc, char *argv[])
 		}
 		printf("\n");
 	}		
-	*/
+	
 	printf("--------------------------------------------------\n\n");
 	// ---------------------------------------------------------------
-
+	*/
 
 
 	// ---------------------- RE-INITIALIZE MATRICES -----------------
@@ -165,19 +163,6 @@ int main(int argc, char *argv[])
 
 
 	// Set new block size
-	/*
-	if ( nAvail-margin > n )
-	{
-		// uh we could reduce the size of the blocking I guess
-	}
-	else
-	{
-		ib = nAvail - margin;
-		kb = nAvail - margin;
-		ib = blockSize;
-		kb = blockSize;
-	}
-	*/
 	ib = blockSize;
 	kb = blockSize;
 	//ib = 50;
