@@ -6,7 +6,7 @@
 
 
 // Define the size of the nxn matrices we're working with
-#define n 1400
+#define n 100
 
 // Allocate matrices on heap
 float arrA[n][n],arrB[n][n],arrC[n][n];
@@ -14,14 +14,28 @@ float arrA[n][n],arrB[n][n],arrC[n][n];
 int main(int argc, char *argv[])
 {
 
+	// Print matrix size
+        printf("Size of matrix: [%d x %d]\n", n,n);
+
 	// Get cache size of computer
 	int cacheSize = getCacheSize();
         printf("Cache size of this computer's processor: %d Bytes\n", cacheSize);
 	int nAvail = sqrt(cacheSize/sizeof(float));
-	printf("Dimension size of matrix that can fit in cache:  %d x %d \n", nAvail,nAvail);
+	printf("Dimension size of matrix that can fit in cache: [%d x %d] \n", nAvail,nAvail);
 
 	// Set margin
 	int margin = 2;	// number of rows/columns to reserve to pad the cache
+
+	// Figure out a good size for the matrix blocks
+	int numBlocks = 1;
+	int blockSize = n;
+	do {
+		blockSize = n / numBlocks;
+		numBlocks++;
+	}
+	while ( blockSize > nAvail );
+
+        printf("Block size chosen: [%d x %d] \n", blockSize, blockSize);
 
 	
 
@@ -117,7 +131,24 @@ int main(int argc, char *argv[])
 	// ---------------------------------------------------------------
 
 
+
+	// ---------------------- RE-INITIALIZE MATRIX -------------------
+	printf("Initializing matrices...");
+
+	// Create random matrices
+	for (int i = 0; i < n; i++)           
+	{	
+		//printf("Row = %d\n",i); 	
+		for (int j = 0; j < n; j++)                         
+		{         
+			arrC[i][j] = 0.0;
+		}
+	}
+	printf(" initialized\n\n");
+	// ---------------------------------------------------------------
 	
+
+
 	// ----------------- COMPUTE PRODUCT (OPTIMIZED) -----------------
 	// Update progress
 	printf("--------------------------------------------------\n");
@@ -130,6 +161,7 @@ int main(int argc, char *argv[])
 
 
 	// Set new block size
+	/*
 	if ( nAvail-margin > n )
 	{
 		// uh we could reduce the size of the blocking I guess
@@ -138,8 +170,14 @@ int main(int argc, char *argv[])
 	{
 		ib = nAvail - margin;
 		kb = nAvail - margin;
+		ib = blockSize;
+		kb = blockSize;
 	}
-	
+	*/
+	ib = blockSize;
+	kb = blockSize;
+
+
 	// Compute matrix product
 	for (int ii = 0; ii < n; ii += ib)
 	{
@@ -191,7 +229,7 @@ int main(int argc, char *argv[])
 		printf("\n");
 	}		
 	*/
-	printf("--------------------------------------------------\n");
+	printf("--------------------------------------------------\n\n");
 	// ---------------------------------------------------------------
 
 
