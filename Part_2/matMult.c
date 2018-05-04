@@ -184,6 +184,7 @@ int main(int argc, char *argv[])
 
 
 	// Compute matrix product
+#pragma omp parallel for private(i,j,k,ii,kk,acc00,acc01,acc10,acc11) shared(A,B,C)     
 	for (int ii = 0; ii < n; ii += ib)
 	{
 		for (int kk = 0; kk < n; kk += kb)

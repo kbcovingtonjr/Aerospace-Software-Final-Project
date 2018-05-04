@@ -8,7 +8,7 @@
 # ************************************************************************
 
 
-matMult: matMult.c getCacheSize.c
-	gcc -fopenmp -o matMult matMult.c getCacheSize.c -lm
+matMult_par: matMult_parallel.c getCacheSize.c
+	gcc -fopenmp -o matMult_par matMult_parallel.c getCacheSize.c -lm
 clean: 
-	rm -f *.o matMult
+	rm -f *.o matMult_par

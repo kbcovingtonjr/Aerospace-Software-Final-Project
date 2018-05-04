@@ -132,51 +132,41 @@ int main(int argc, char *argv[])
 	*/
 
 
-	// ---------------------- RE-INITIALIZE MATRICES -----------------
-	printf("Initializing matrices...");
-
-	// Create random matrices
-	for (int i = 0; i < n; i++)           
-	{	
-		//printf("Row = %d\n",i); 	
-		for (int j = 0; j < n; j++)                         
-		{         
-        		arrA[i][j] = (float) rand() / RAND_MAX;
-        		arrB[i][j] = (float) rand() / RAND_MAX;
-			arrC[i][j] = 0.0;
-		}
-	}
-	printf(" initialized\n\n");
-	// ---------------------------------------------------------------
-	
-
-
 	// ----------------- COMPUTE PRODUCT (OPTIMIZED) -----------------
 	// Update progress
 	printf("--------------------------------------------------\n");
 	printf("Computing matrix product (optimized)...\n");
 	
 	// Begin clock
-	//clock_t begin, end;
-	//double time_spent;
+	clock_t begin, end;
+	double time_spent;
 	begin = clock();
 
 
 	// Set new block size
-	ib = blockSize;
-	kb = blockSize;
-	//ib = 50;
-	//kb = 50;
+	int ib = blockSize;
+	int kb = blockSize;
+	int i,j,k,ii,kk;
+	float acc00,acc01,acc10,acc11;
 
 
 	// Compute matrix product
-	for (int ii = 0; ii < n; ii += ib)
+#pragma omp parallel for private(i,j,k,ii,kk,acc00,acc01,acc10,acc11) shared(arrA,arrB,arrC)     
+	for (ii = 0; ii < n; ii += ib)
 	{
-		for (int kk = 0; kk < n; kk += kb)
+	int numThreads = omp_get_num_threads();
+	printf("Num threads: %d\n", numThreads);
+
+	int numProcs = omp_get_num_procs();
+	printf("Num of cores: %d\n", numProcs);
+
+	int ifPar = omp_in_parallel();
+	printf("Is parallel: %d\n", ifPar);
+		for (kk = 0; kk < n; kk += kb)
 		{
-			for (int j = 0; j < n; j += 2)
+			for (j = 0; j < n; j += 2)
 			{
-				for (int i = ii; i < ii + ib; i += 2)
+				for (i = ii; i < ii + ib; i += 2)
 				{
 					if (kk == 0)
 						acc00 = acc01 = acc10 = acc11 = 0.0;
@@ -187,7 +177,7 @@ int main(int argc, char *argv[])
 						acc10 = arrC[i+1][j];
 						acc11 = arrC[i+1][j+1];
 					}	
-					for (int k = kk; k < kk + kb; k++)
+					for (k = kk; k < kk + kb; k++)
 					{
 						acc00 += arrA[i][k]*arrB[k][j];
 						acc01 += arrA[i][k]*arrB[k][j+1];
