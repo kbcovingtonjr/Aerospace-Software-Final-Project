@@ -7,7 +7,7 @@
 
 
 // Define the size of the nxn matrices we're working with
-#define n 2000
+#define n 10000
 
 // Allocate matrices on heap
 float arrA[n][n],arrB[n][n],arrC[n][n];
