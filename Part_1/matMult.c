@@ -39,20 +39,20 @@ int main(int argc, char *argv[])
 
         printf("Block size chosen: [%d x %d] \n", blockSize, blockSize);
 
-	
+
 
 	// ---------------------- INITIALIZE MATRICES --------------------
 	printf("Initializing matrices...");
 
 	// Create random matrices
-        // rand_matrix(n, arrA, arrB);
+	// rand_matrix(n, arrA, arrB);
 	for (int i = 0; i < n; i++)           
 	{	
 		//printf("Row = %d\n",i); 	
 		for (int j = 0; j < n; j++)                         
 		{         
-        		arrA[i][j] = (float) rand() / RAND_MAX;
-        		arrB[i][j] = (float) rand() / RAND_MAX;
+			arrA[i][j] = (float) rand() / RAND_MAX;
+			arrB[i][j] = (float) rand() / RAND_MAX;
 			arrC[i][j] = 0.0;
 			//printf("A[%d][%d] = %lf\n",i,j,arrA[i][j]);
 		}
@@ -61,204 +61,158 @@ int main(int argc, char *argv[])
 	// ---------------------------------------------------------------
 
 
-	
-	// ----------------- COMPUTE PRODUCT (UNOPTIMIZED) ---------------
-	// Update progress
-	printf("--------------------------------------------------\n");
-	printf("Computing matrix product (unoptimized)...\n");
-	
-	//int ii, kk;
-	
+
 	// Begin clock
 	clock_t begin, end;
 	double time_spent;
 	begin = clock();
-
-	// Compute matrix product
-
 	float  acc00, acc01, acc10, acc11;
-	int ib = 2;
-	int kb = 2;
-	
-	for (int ii = 0; ii < n; ii += ib)
+	int ib;
+	int kb;
+
+
+	// If no optimization was chosen
+	if ( atoi(argv[1]) == 1 )
 	{
-		for (int kk = 0; kk < n; kk += kb)
+		
+		// ----------------- COMPUTE PRODUCT (UNOPTIMIZED) ---------------
+		// Update progress
+		printf("--------------------------------------------------\n");
+		printf("Computing matrix product (unoptimized)...\n");
+		
+
+		// Compute matrix product
+		ib = 2;
+		kb = 2;
+		
+		for (int ii = 0; ii < n; ii += ib)
 		{
-			for (int j = 0; j < n; j += 2)
+			for (int kk = 0; kk < n; kk += kb)
 			{
-				for (int i = ii; i < ii + ib; i += 2)
+				for (int j = 0; j < n; j += 2)
 				{
-					if (kk == 0)
-						acc00 = acc01 = acc10 = acc11 = 0.0;
-					else
+					for (int i = ii; i < ii + ib; i += 2)
 					{
-						acc00 = arrC[i][j];
-						acc01 = arrC[i][j+1];
-						acc10 = arrC[i+1][j];
-						acc11 = arrC[i+1][j+1];
-					}	
-					for (int k = kk; k < kk + kb; k++)
-					{
-						acc00 += arrA[i][k]*arrB[k][j];
-						acc01 += arrA[i][k]*arrB[k][j+1];
-						acc10 += arrA[i+1][k]*arrB[k][j];
-						acc11 += arrA[i+1][k]*arrB[k][j+1];
+						if (kk == 0)
+							acc00 = acc01 = acc10 = acc11 = 0.0;
+						else
+						{
+							acc00 = arrC[i][j];
+							acc01 = arrC[i][j+1];
+							acc10 = arrC[i+1][j];
+							acc11 = arrC[i+1][j+1];
+						}	
+						for (int k = kk; k < kk + kb; k++)
+						{
+							acc00 += arrA[i][k]*arrB[k][j];
+							acc01 += arrA[i][k]*arrB[k][j+1];
+							acc10 += arrA[i+1][k]*arrB[k][j];
+							acc11 += arrA[i+1][k]*arrB[k][j+1];
+						}
+						arrC[i][j] = acc00;
+						arrC[i][j+1] = acc01;
+						arrC[i+1][j] = acc10;
+						arrC[i+1][j+1] = acc11;
 					}
-					arrC[i][j] = acc00;
-					arrC[i][j+1] = acc01;
-					arrC[i+1][j] = acc10;
-					arrC[i+1][j+1] = acc11;
 				}
 			}
 		}
-	}
 
-	// Stop clock
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("Time spent computing matrix product(unoptimized): %lf seconds\n",time_spent);
+		// Stop clock
+		end = clock();
+		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		printf("Time spent computing matrix product(unoptimized): %lf seconds\n",time_spent);
 
-	/*
-	printf("Matrix Product: \n");
-	for(i = 0;i < n;i++)
-	{
-		for(j = 0;j < n;j++)
+		/*
+		printf("Matrix Product: \n");
+		for(i = 0;i < n;i++)
 		{
-			printf("%f",arrC[i][j]);
-		}
-		printf("\n");
-	}		
-	*/
-	printf("--------------------------------------------------\n\n");
-	// ---------------------------------------------------------------
-
-
-
-	// ---------------------- RE-INITIALIZE MATRICES -----------------
-	printf("Initializing matrices...");
-
-	// Create random matrices
-	for (int i = 0; i < n; i++)           
-	{	
-		//printf("Row = %d\n",i); 	
-		for (int j = 0; j < n; j++)                         
-		{         
-        		arrA[i][j] = (float) rand() / RAND_MAX;
-        		arrB[i][j] = (float) rand() / RAND_MAX;
-			arrC[i][j] = 0.0;
-		}
+			for(j = 0;j < n;j++)
+			{
+				printf("%f",arrC[i][j]);
+			}
+			printf("\n");
+		}		
+		*/
+		printf("--------------------------------------------------\n\n");
+		// ---------------------------------------------------------------
 	}
-	printf(" initialized\n\n");
-	// ---------------------------------------------------------------
-	
 
 
-	// ----------------- COMPUTE PRODUCT (OPTIMIZED) -----------------
-	// Update progress
-	printf("--------------------------------------------------\n");
-	printf("Computing matrix product (optimized)...\n");
-	
-	// Begin clock
-	//clock_t begin, end;
-	//double time_spent;
-	begin = clock();
 
-
-	// Set new block size
-	/*
-	if ( nAvail-margin > n )
+	// If optimization was chosen
+	else if ( atoi(argv[1]) == 2 )
 	{
-		// uh we could reduce the size of the blocking I guess
+
+		// ----------------- COMPUTE PRODUCT (OPTIMIZED) -----------------
+		// Update progress
+		printf("--------------------------------------------------\n");
+		printf("Computing matrix product (optimized)...\n");
+		
+		ib = blockSize;
+		kb = blockSize;
+
+		// Compute matrix product
+		for (int ii = 0; ii < n; ii += ib)
+		{
+			for (int kk = 0; kk < n; kk += kb)
+			{
+				for (int j = 0; j < n; j += 2)
+				{
+					for (int i = ii; i < ii + ib; i += 2)
+					{
+						if (kk == 0)
+							acc00 = acc01 = acc10 = acc11 = 0.0;
+						else
+						{
+							acc00 = arrC[i][j];
+							acc01 = arrC[i][j+1];
+							acc10 = arrC[i+1][j];
+							acc11 = arrC[i+1][j+1];
+						}	
+						for (int k = kk; k < kk + kb; k++)
+						{
+							acc00 += arrA[i][k]*arrB[k][j];
+							acc01 += arrA[i][k]*arrB[k][j+1];
+							acc10 += arrA[i+1][k]*arrB[k][j];
+							acc11 += arrA[i+1][k]*arrB[k][j+1];
+						}
+						arrC[i][j] = acc00;
+						arrC[i][j+1] = acc01;
+						arrC[i+1][j] = acc10;
+						arrC[i+1][j+1] = acc11;
+					}
+				}
+			}
+		}
+
+
+		// Stop clock
+		end = clock();
+		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		printf("Time spent computing matrix product (optimized): %lf seconds\n",time_spent);
+
+		/*
+		printf("Matrix Product: \n");
+		for(i = 0;i < n;i++)
+		{
+			for(j = 0;j < n;j++)
+			{
+				printf("%f",arrC[i][j]);
+			}
+			printf("\n");
+		}		
+		*/
+		printf("--------------------------------------------------\n\n");
+		// ---------------------------------------------------------------
 	}
 	else
 	{
-		ib = nAvail - margin;
-		kb = nAvail - margin;
-		ib = blockSize;
-		kb = blockSize;
+		fprintf(stderr, "Please choose (1) for no optimization or (2) for optimization. \n");
 	}
-	*/
-	ib = blockSize;
-	kb = blockSize;
-	//ib = 50;
-	//kb = 50;
-
-
-	// Compute matrix product
-	for (int ii = 0; ii < n; ii += ib)
-	{
-		for (int kk = 0; kk < n; kk += kb)
-		{
-			for (int j = 0; j < n; j += 2)
-			{
-				for (int i = ii; i < ii + ib; i += 2)
-				{
-					if (kk == 0)
-						acc00 = acc01 = acc10 = acc11 = 0.0;
-					else
-					{
-						acc00 = arrC[i][j];
-						acc01 = arrC[i][j+1];
-						acc10 = arrC[i+1][j];
-						acc11 = arrC[i+1][j+1];
-					}	
-					for (int k = kk; k < kk + kb; k++)
-					{
-						acc00 += arrA[i][k]*arrB[k][j];
-						acc01 += arrA[i][k]*arrB[k][j+1];
-						acc10 += arrA[i+1][k]*arrB[k][j];
-						acc11 += arrA[i+1][k]*arrB[k][j+1];
-					}
-					arrC[i][j] = acc00;
-					arrC[i][j+1] = acc01;
-					arrC[i+1][j] = acc10;
-					arrC[i+1][j+1] = acc11;
-				}
-			}
-		}
-	}
-
-
-	// Stop clock
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("Time spent computing matrix product (optimized): %lf seconds\n",time_spent);
-
-	/*
-	printf("Matrix Product: \n");
-	for(i = 0;i < n;i++)
-	{
-		for(j = 0;j < n;j++)
-		{
-			printf("%f",arrC[i][j]);
-		}
-		printf("\n");
-	}		
-	*/
-	printf("--------------------------------------------------\n\n");
-	// ---------------------------------------------------------------
-
-
-	//free(arrA);
-	//free(arrB);
-	//free(arrC);
 	
+
 	return 0;
 }
 
 
-/*void rand_matrix(int n, float **arrA, float **arrB)
-{
-	int i, j;
-	srand ( time(NULL) );
-	
-	for (i = 0; i < n; i++)
-	{		
-		for (j = 0; j < n; j++)
-		{
-			arrA[i][j] = (float) rand() / RAND_MAX;
-			arrB[i][j] = (float) rand() / RAND_MAX;
-		}
-		printf("HERE\n");
-	}
-}*/
