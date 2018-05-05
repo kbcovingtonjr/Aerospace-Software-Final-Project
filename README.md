@@ -19,7 +19,9 @@ To run the entire Part II code, which runs the code multiple times using 1, 2 4,
 
 To run and profile the Part I optimized case:
 
-**> ./Profile.sh**
+**> ./Profile.sh 1**  (for un-optimized case)
+
+**> ./Profile.sh 2**  (for optimized case)
 
 
 # Part II
