@@ -4,7 +4,7 @@
 
 echo "Compiling, linking, etc..."
 make profile
-./matMult 2
+./matMult $1
 gprof matMult gmon.out > analysis.txt
 echo ""
 
