@@ -20,7 +20,13 @@ echo ""
 echo ""
 
 echo "Running optimized code with 4 threads..."
-export OMP_NUM_THREADS="4"
+export OMP_NUM_THREADS="3"
+echo ""
+./matMult_par
+echo ""
+
+echo "Running optimized code with 8 threads..."
+export OMP_NUM_THREADS="8"
 echo ""
 ./matMult_par
 echo ""

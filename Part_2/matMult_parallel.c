@@ -83,14 +83,22 @@ int main(int argc, char *argv[])
 #pragma omp parallel for private(i,j,k,ii,kk,acc00,acc01,acc10,acc11) shared(arrA,arrB,arrC)     
 	for (ii = 0; ii < n; ii += ib)
 	{
-	//int numThreads = omp_get_num_threads();
-	//printf("Num threads: %d\n", numThreads);
-	//int numProcs = omp_get_num_procs();
-	//printf("Num of cores: %d\n", numProcs);
+	//	int numThreads = omp_get_num_threads();
+	//	printf("Num threads: %d\n", numThreads);
+	//	int numProcs = omp_get_num_procs();
+	//	printf("Num of cores: %d\n", numProcs);
 	//int ifPar = omp_in_parallel();
 	//printf("Is parallel: %d\n", ifPar);
+		if( n - ii < ib)
+		{
+			ib = n - ii;
+		}
 		for (kk = 0; kk < n; kk += kb)
 		{
+			if(n-kk < kb)
+			{
+				kb = n - kk;
+			}
 			for (j = 0; j < n; j += 2)
 			{
 				for (i = ii; i < ii + ib; i += 2)

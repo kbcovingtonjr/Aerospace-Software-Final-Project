@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 	// Set margin
 	//int margin = n / 4;	// number of rows/columns to reserve to pad the cache
-	int margin = 0;	// number of rows/columns to reserve to pad the cache
+	int margin = 2;	// number of rows/columns to reserve to pad the cache
 
 	// Figure out a good size for the matrix blocks
 	int numBlocks = 1;
