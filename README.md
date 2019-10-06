@@ -9,7 +9,7 @@ In this part, we optimized the serial performance of the matrix-matrix multiplic
 
 How to Compile/Run: 
 ------
-To run the entire Part II code, which runs the code multiple times using 1, 2 4, and 8:
+To run the entire Part I code:
 **> make**
 
 **> matMult 1**  (for un-optimized case)
@@ -30,7 +30,7 @@ In this part, we parallelized the serial optimized matrix-matrix multiplication 
 
 How to Compile/Run: 
 ------
-To run the entire Part II code, which runs the code multiple times using 1, 2 4, and 8:
+To run the entire Part II code, which runs the code multiple times using 1, 2, 4, and 8 threads:
 
 **> ./RunParallel.sh**
 
