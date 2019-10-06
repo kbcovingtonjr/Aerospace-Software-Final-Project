@@ -5,12 +5,13 @@ In this part, we optimized the serial performance of the matrix-matrix multiplic
 How to Compile/Run: 
 ------
 To run the entire Part I code:
-**> make**
-**> matMult 1**  (for un-optimized case)
-**> matMult 2**  (for optimized case)
+
+**> `make`**
+**> `matMult 1`**  (for un-optimized case)
+**> `matMult 2`**  (for optimized case)
 
 To run and profile:
 
-**> ./Profile.sh 1**  (for un-optimized case)
+**> `./Profile.sh 1`**  (for un-optimized case)
 
-**> ./Profile.sh 2**  (for optimized case)
+**> `./Profile.sh 2`**  (for optimized case)
